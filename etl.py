@@ -8,6 +8,10 @@ from sql_queries import *
 
 
 def process_song_file(cur, filepath):
+    """This function reads in the json song file and divides the data in their respective tables songs and artists.
+    It takes two input arguments:
+    cur: the cursor position in the database
+    filepath: the filepath where the json song files are stored"""
     # open song file
     df = pd.read_json(filepath, typ= "series")
     df = pd.DataFrame([df])
@@ -25,6 +29,11 @@ def process_song_file(cur, filepath):
 
 
 def process_log_file(cur, filepath):
+    """ This function reads in the json log file, filters the data on the NextSong action and divides the data in their respective tables time and users.
+    It takes two input arguments:
+    cur: the cursor position in the database
+    filepath: the filepath where the json log files is stored
+    """
     # open log file
     df = pd.read_json(filepath, lines= True)
     df = pd.DataFrame(df)
@@ -72,6 +81,12 @@ def process_log_file(cur, filepath):
 
 
 def process_data(cur, conn, filepath, func):
+    """ This function takes a function and filepath. Important: the input function must match the data in the filepath.
+    cur: cursor position in the database
+    conn: the connection of the current session to the database
+    filepath: location of the data you want to process
+    func: respective function to the data in the filepath
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -91,6 +106,7 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
+    """This function executes the data processing steps when the script is called as a main programm."""
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=leonie password=nanodegree")
     cur = conn.cursor()
 
